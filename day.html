@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Valentine Day</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page" id="page">
+    <header>
+      <div style="display:flex;align-items:center;gap:12px">
+        <h2 id="dayTitle">Day</h2>
+        <div id="countdown" class="small">Countdown: --d --h --m --s</div>
+      </div>
+      <div>
+        <button id="showLetter" class="small">Show Letter</button>
+        <button id="musicToggle" class="small">Play Music</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="visuals" id="visuals">
+        <div id="typed"></div>
+        <div class="quote" id="quote"></div>
+        <!-- Cat carrying letter animation -->
+        <div id="catWrap" class="catWrap" aria-hidden="true">
+          <svg id="catSvg" width="160" height="120" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+            <g id="cat" transform="translate(0,20)">
+              <ellipse cx="50" cy="70" rx="28" ry="18" fill="#e6a6b3" />
+              <circle cx="30" cy="50" r="16" fill="#f6c2cf" />
+              <circle cx="70" cy="50" r="16" fill="#f6c2cf" />
+              <rect x="44" y="30" width="40" height="24" rx="4" ry="4" fill="#f9d6df" />
+            </g>
+            <!-- envelope -->
+            <g id="envelope" transform="translate(110,40)">
+              <rect width="36" height="24" rx="3" fill="#fff1f4" stroke="#ff6b8a" />
+              <polyline points="0,0 18,12 36,0" fill="#ff9bb8" opacity="0.9" />
+            </g>
+          </svg>
+        </div>
+        <div class="themeImages" id="themeImages">
+          <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=60" alt="themed1">
+          <img src="https://images.unsplash.com/photo-1505576391880-4d3a9b0f7d7a?auto=format&fit=crop&w=600&q=60" alt="themed2">
+        </div>
+        <div id="incomingGift" style="margin-top:12px;display:none"></div>
+      </section>
+
+      <section class="form">
+        <label>From: <input id="from" placeholder="Your name"></label>
+        <label>To: <input id="to" placeholder="Beloved name"></label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button id="gen" class="btn">Generate QR</button>
+          <button id="giftRose" class="small">Send Rose</button>
+          <button id="giftTeddy" class="small">Send Teddy</button>
+          <button id="giftChoco" class="small">Send Chocolate</button>
+          <button id="googleLogin" class="small">Sign in with Google</button>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <select id="giftMusicSelect" class="small">
+            <option value="">Attach music (optional)</option>
+            <option value="https://assets.mixkit.co/music/preview/mixkit-romantic-acoustic-guitar-1491.mp3">Romantic Guitar</option>
+            <option value="https://assets.mixkit.co/music/preview/mixkit-love-story-1202.mp3">Love Story</option>
+            <option value="https://assets.mixkit.co/music/preview/mixkit-soft-piano-melody-1266.mp3">Soft Piano</option>
+          </select>
+          <input id="giftMusic" placeholder="Or paste music URL (mp3)" style="padding:8px;border-radius:8px;border:1px solid #ffd9e3;min-width:200px" />
+        </div>
+        <div id="giftMsg" style="margin-top:8px;color:#6b2a3a"></div>
+        <div id="qrcodeWrap" class="qrcodeWrap" style="display:none">
+          <canvas id="qrcanvas"></canvas>
+          <div id="qrText">Scan this QR to see your Valentine message 🌹</div>
+          <a id="downloadBtn" class="small" href="#">Save QR</a>
+          <a id="waShare" class="small" href="#" target="_blank">Send via WhatsApp</a>
+        </div>
+        <div id="promiseArea" style="margin-top:12px;display:none">
+          <h4>Promises</h4>
+          <div id="promisesList"></div>
+          <textarea id="newPromise" placeholder="Write a promise..." style="width:100%;height:64px;border-radius:8px;padding:8px"></textarea>
+          <button id="addPromise" class="small">Add Promise</button>
+        </div>
+
+        <div id="chatArea" style="margin-top:12px;display:none">
+          <h4>Chat</h4>
+          <div id="chatLog" style="max-height:160px;overflow:auto;background:#fff7f8;padding:8px;border-radius:8px"></div>
+          <input id="chatInput" placeholder="Type a message" style="width:100%;padding:8px;border-radius:8px;margin-top:6px">
+          <button id="chatSend" class="small">Send</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="petals" class="petals"></div>
+    <div id="cursorHearts"></div>
+
+    <div id="letterModal" class="letterModal" style="display:none">
+      <div class="letterContent">
+        <button id="closeLetter" class="small">Close</button>
+        <h3>Love Letter</h3>
+        <textarea id="letterEditor" style="width:100%;height:140px;border-radius:8px;padding:8px"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="saveLetter" class="small">Save Letter</button>
+          <button id="replyLetter" class="small">Reply</button>
+        </div>
+        <hr />
+        <div id="letterReplies"></div>
+      </div>
+    </div>
+
+    <!-- Propose modal -->
+    <div id="proposeModal" class="letterModal" style="display:none">
+      <div class="letterContent">
+        <h2 id="proposeText">Will you be my Valentine?</h2>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="proposeYes" class="btn">Yes</button>
+          <button id="proposeNo" class="small">No</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emotional screen shown when proposal declined -->
+    <div id="sadScreen" class="letterModal" style="display:none;background:rgba(0,0,0,.7)">
+      <div class="letterContent" style="text-align:center">
+        <h2>Sometimes hearts ache...</h2>
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=60" style="max-width:320px;border-radius:8px"/>
+        <audio id="sadAudio" controls style="margin-top:8px">
+          <source src="https://assets.mixkit.co/music/preview/mixkit-lonely-piano-1033.mp3" type="audio/mpeg">
+        </audio>
+        <p style="margin-top:12px">It hurts now, but you will heal. 💔</p>
+      </div>
+    </div>
+
+    <audio id="bgm" loop>
+      <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-acoustic-guitar-1491.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
